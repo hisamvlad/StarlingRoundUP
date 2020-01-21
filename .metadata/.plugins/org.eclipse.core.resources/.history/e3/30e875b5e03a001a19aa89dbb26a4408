@@ -1,0 +1,15 @@
+package com.example.demo.util;
+
+public class HttpHeadersGeneratorTest {
+
+    @Test
+    public void shouldCreateHttpEntity() {
+        HttpHeadersGenerator httpHeadersGenerator = new HttpHeadersGenerator();
+
+        HttpHeaders httpHeaders = httpHeadersGenerator.createHttpHeaders();
+
+        assertEquals(httpHeaders.getAccept(), List.of(MediaType.APPLICATION_JSON));
+        assertEquals(httpHeaders.getContentType(), MediaType.APPLICATION_JSON);
+        assertNotNull(httpHeaders.get("Authorization"));
+    }
+}

@@ -1,0 +1,44 @@
+package com.example.demo.service;
+
+
+@Service
+public class PutSavingsService {
+	private final RestTemplate restTemplate;
+
+    private final HttpHeadersGenerator httpHeadersGenerator;
+
+    private final UUIDGenerator uuidGenerator;
+
+    public PutSavingsService(RestTemplate restTemplate, HttpHeadersGenerator httpHeadersGenerator, UUIDGenerator uuidGenerator) {
+        this.restTemplate = restTemplate;
+        this.httpHeadersGenerator = httpHeadersGenerator;
+        this.uuidGenerator = uuidGenerator;
+    }
+
+    public void putSavings(String savingsGoalUUID, BigDecimal roundedupAmount) {
+
+        var urlParams = new HashMap<String, String>();
+        var uuid = uuidGenerator.getUUID();
+        urlParams.put("savingsGoalUid", savingsGoalUUID);
+        urlParams.put("transferUid", uuid);
+
+        var putEntity = getHttpEntity(roundedupAmount);
+
+        restTemplate.exchange("https://api-sandbox.starlingbank.com/api/v1/savings-goals/{savingsGoalUid}/add-money/{transferUid}",
+                HttpMethod.PUT, putEntity, String.class, urlParams);
+    }
+
+    private HttpEntity<AddMoney> getHttpEntity(BigDecimal roundedupAmount) {
+
+        var httpHeaders = httpHeadersGenerator.createHttpHeaders();
+
+        var amount = new Amount();
+        amount.setMinorUnits(roundedupAmount.movePointRight(2));
+        amount.setCurrency(Currency.getInstance("GBP"));
+
+        var addMoney = new AddMoney();
+        addMoney.setAmount(amount);
+
+        return new HttpEntity<>(addMoney, httpHeaders);
+    }
+}

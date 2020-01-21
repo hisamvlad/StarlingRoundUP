@@ -1,0 +1,16 @@
+package com.example.demo.util;
+
+
+@Component
+public class HttpHeadersGenerator {
+    @Value("${bearerToken}")
+    private String bearerToken;
+
+    public HttpHeaders createHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("Authorization", "Bearer " + bearerToken);
+        return headers;
+    }
+}

@@ -1,0 +1,15 @@
+package com.example.demo.domain.transaction;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class TransactionResponse {
+	 @JsonProperty("_embedded")
+	    private EmbeddedTransactions embeddedTransactions;
+
+	    public EmbeddedTransactions getEmbeddedTransactions() {
+	        return embeddedTransactions;
+	    }
+
+	    public void setEmbeddedTransactions(EmbeddedTransactions embeddedTransactions) {
+	        this.embeddedTransactions = embeddedTransactions;
+	    }
+}

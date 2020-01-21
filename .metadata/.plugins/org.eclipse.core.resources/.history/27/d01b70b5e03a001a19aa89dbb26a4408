@@ -1,0 +1,13 @@
+package com.example.demo.util;
+
+public class UUIDGeneratorTest {
+    private UUIDGenerator uuidGenerator = new UUIDGenerator();
+
+    @Test
+    public void shouldGenerateUUIDString() {
+        String uuid = uuidGenerator.getUUID();
+
+        assertNotNull(uuid);
+    }
+
+}

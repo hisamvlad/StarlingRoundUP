@@ -1,0 +1,54 @@
+package com.example.demo.service;
+
+import static org.hamcrest.CoreMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import com.example.demo.domain.transaction.EmbeddedTransaction;
+import com.example.demo.domain.transaction.Transaction;
+import com.example.demo.domain.transaction.TransactionResponse;
+import com.example.demo.util.HttpHeadersGenerator;
+
+public class RetrieveTransactionsServiceTest {
+	 private RestTemplate restTemplate = mock(RestTemplate.class);
+
+	    private HttpHeadersGenerator httpHeadersGenerator = mock(HttpHeadersGenerator.class);
+
+	    private RetrieveTransactionsService retrieveTransactionsService;
+
+	    @BeforeEach
+	    public void before() {
+	        retrieveTransactionsService = new RetrieveTransactionsService(restTemplate, httpHeadersGenerator);
+	    }
+
+	    @Test
+	    public void shouldRetrieveTransactions() {
+
+	        ResponseEntity responseEntity = mock(ResponseEntity.class);
+	        TransactionResponse transactionResponse = mock(TransactionResponse.class);
+	        EmbeddedTransaction embeddedTransactions = mock(EmbeddedTransaction.class);
+	        Transaction transaction = mock(Transaction.class);
+	        when(embeddedTransactions.getTransactions()).thenReturn(Arrays.asList(transaction));
+	        when(transactionResponse.getEmbeddedTransactions()).thenReturn(embeddedTransactions);
+	        when(responseEntity.getBody()).thenReturn(transactionResponse);
+	        when(restTemplate.exchange(eq("https://api-sandbox.starlingbank.com/api/v2/feed/account/ed5437b1-e6d5-436a-9dc4-b780296a2529/category/a3266fcf-f7e7-44e9-b872-8ede2d2d1b38"),
+	                eq(HttpMethod.GET), (HttpEntity<?>) any(HttpEntity.class), any(ParameterizedTypeReference.class))).thenReturn(responseEntity);
+
+	        List<Transaction> transactions = retrieveTransactionsService.getTransactions();
+
+	        assertEquals(Arrays.asList(transaction), transactions);
+	    }
+}

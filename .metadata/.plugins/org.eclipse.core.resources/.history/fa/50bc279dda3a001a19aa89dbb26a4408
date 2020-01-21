@@ -1,0 +1,9 @@
+package com.example.demo.util;
+
+
+@Component
+public class UUIDGenerator {
+	public String getUUID() {
+        return UUID.randomUUID().toString();
+    }
+}

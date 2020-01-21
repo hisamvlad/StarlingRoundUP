@@ -1,0 +1,24 @@
+package com.example.demo.domain.addmoney;
+
+public class Amount {
+
+    private Currency currency;
+
+    private BigDecimal minorUnits;
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public BigDecimal getMinorUnits() {
+        return minorUnits;
+    }
+
+    public void setMinorUnits(BigDecimal minorUnits) {
+        this.minorUnits = minorUnits;
+    }
+}
